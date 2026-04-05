@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Ice Launcher - Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #06b6d4;
+      --primary-hover: rgba(6,182,212,0.9);
+      --bg: #0f172a;
+      --foreground: #f1f5f9;
+      --muted: #94a3b8;
+      --border: rgba(148,163,184,0.15);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--foreground);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ---------- layout ---------- */
+    .site-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    canvas#particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .radial-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(ellipse at 50% 0%, rgba(6,182,212,0.10) 0%, transparent 70%);
+    }
+
+    header, main, footer {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ---------- header ---------- */
+    header {
+      position: fixed;
+      top: 2rem;
+      left: 1.5rem;
+    }
+    @media (min-width: 768px) { header { left: 3rem; } }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.05em;
+      animation: fade-in 0.6s ease-out 0.1s forwards;
+      opacity: 0;
+    }
+
+    /* ---------- main hero ---------- */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 1.5rem 2rem;
+    }
+    @media (min-width: 768px) { main { padding: 5rem 3rem 2rem; } }
+
+    .hero {
+      width: 100%;
+      max-width: 42rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* headline */
+    .headline {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      animation: fade-in-up 0.6s ease-out 0.2s forwards;
+      opacity: 0;
+    }
+    .headline h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 3.75rem);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+    .headline h2 .accent {
+      display: block;
+      color: var(--primary);
+    }
+    .headline p {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 32rem;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* features */
+    .features {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      animation: fade-in-up 0.6s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+    .feature-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .zap-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* cta */
+    .cta {
+      animation: fade-in-up 0.6s ease-out 0.4s forwards;
+      opacity: 0;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      text-decoration: none;
+    }
+    .download-btn:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 0 24px rgba(6,182,212,0.5);
+      transform: scale(1.05);
+    }
+    .download-btn:active { transform: scale(0.96); }
+    .download-btn.loading { opacity: 0.7; pointer-events: none; }
+    .download-icon { transition: transform 0.3s; }
+    .download-btn:hover .download-icon { animation: bounce 0.6s infinite; }
+
+    .cta-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.75rem;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      padding: 2rem 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    /* ---------- animations ---------- */
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-4px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+    <canvas id="particles"></canvas>
+    <div class="radial-glow"></div>
+
+    <header>
+      <span class="brand">ICE LAUNCHER</span>
+    </header>
+
+    <main>
+      <div class="hero">
+        <!-- Headline -->
+        <div class="headline">
+          <h2>
+            Freeze Your
+            <span class="accent">Gaming Experience</span>
+          </h2>
+          <p>The ultimate Minecraft launcher with lightning-fast performance, seamless mod management, and a glacial interface that's as smooth as ice.</p>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+          <div class="feature-row">
+            <svg class="zap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Lightning-fast launch times</span>
+          </div>
+          <div class="feature-row">
+            <svg class="zap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>One-click mod installation</span>
+          </div>
+          <div class="feature-row">
+            <svg class="zap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Built-in performance optimization</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+          <a
+            id="dl-btn"
+            class="download-btn"
+            href="IceLauncherSetup1.0.0.exe"
+            download="IceLauncherSetup1.0.0.exe"
+          >
+            <svg class="download-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download v1.0.0
+          </a>
+          <p class="cta-note">Windows 10+ &bull; 150MB &bull; Free</p>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Ice Launcher &copy; 2026. Built for Minecraft enthusiasts.</p>
+    </footer>
+  </div>
+
+  <script>
+    // ── Particle system ──────────────────────────────────────────────────────
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let idCounter = 0;
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function mkParticle() {
+      return {
+        id:      idCounter++,
+        x:       Math.random() * canvas.width,
+        y:       Math.random() * canvas.height - canvas.height,
+        size:    Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.3,
+        vx:      (Math.random() - 0.5) * 0.5,
+        vy:      Math.random() * 0.5 + 0.2,
+        life:    1,
+      };
+    }
+
+    for (let i = 0; i < 50; i++) particles.push(mkParticle());
+
+    function frame() {
+      ctx.fillStyle = 'rgba(15,23,42,0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles = particles
+        .map(p => ({ ...p, x: p.x + p.vx, y: p.y + p.vy, opacity: p.opacity * 0.99, life: p.life - 0.003 }))
+        .filter(p => p.life > 0 && p.y < canvas.height);
+
+      while (particles.length < 50) particles.push(mkParticle());
+
+      particles.forEach(p => {
+        ctx.fillStyle = `rgba(6,182,212,${p.opacity * 0.8})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = `rgba(6,182,212,${p.opacity * 0.4})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size + 2, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      requestAnimationFrame(frame);
+    }
+    frame();
+
+    // ── Download feedback ────────────────────────────────────────────────────
+    document.getElementById('dl-btn').addEventListener('click', function() {
+      this.classList.add('loading');
+      this.textContent = '';
+      const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      svg.setAttribute('width','20'); svg.setAttribute('height','20');
+      svg.setAttribute('viewBox','0 0 24 24'); svg.setAttribute('fill','none');
+      svg.setAttribute('stroke','currentColor'); svg.setAttribute('stroke-width','2');
+      svg.setAttribute('stroke-linecap','round'); svg.setAttribute('stroke-linejoin','round');
+      svg.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
+      this.appendChild(svg);
+      this.appendChild(document.createTextNode(' Downloading...'));
+      setTimeout(() => {
+        this.classList.remove('loading');
+        this.innerHTML = '';
+        const svg2 = svg.cloneNode(true);
+        this.appendChild(svg2);
+        this.appendChild(document.createTextNode(' Download v1.0.0'));
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
